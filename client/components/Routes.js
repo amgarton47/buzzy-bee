@@ -1,5 +1,6 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+// import CacheRoute, { CacheSwitch } from "react-router-cache-route";
+import { HashRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import TodaysBee from "./TodaysBee";
 import YesterdaysBee from "./YesterdaysBee";

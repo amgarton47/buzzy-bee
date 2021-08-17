@@ -15,7 +15,7 @@ const offsetValues = [
   { x: "-80%", y: "150%" },
 ];
 
-class TodaysBee extends React.Component {
+class TodaysBee extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -47,7 +47,9 @@ class TodaysBee extends React.Component {
     return (
       <div>
         <br></br>
-        <div>Today's Bee!</div>
+        <div>
+          Spelling Bee <span>{this.props.displayDate}</span>
+        </div>
         <br></br>
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="inputField"></label>
@@ -57,6 +59,7 @@ class TodaysBee extends React.Component {
             onChange={this.handleChange}
             placeholder="Type or click"
             value={this.props.entryValue}
+            autoComplete="off"
           ></input>
         </form>
         <div>
@@ -93,7 +96,7 @@ const mapState = (state) => ({
   answers: state.beeData.answers,
   validLetters: state.beeData.validLetters,
   pangrams: state.beeData.pangrams,
-  dispplayDate: state.beeData.dispplayDate,
+  displayDate: state.beeData.displayDate,
   entryValue: state.entryField.entryField,
   correctGuesses: state.guessedWords.guesses,
 });
