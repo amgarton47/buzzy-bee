@@ -1,0 +1,44 @@
+* {
+  display: block;
+  font-family: Poppins;
+}
+
+.hex-letter {
+  position: absolute;
+  margin: 0;
+  width: inherit;
+  height: inherit;
+  text-align: center;
+}
+
+.hexagon {
+  width: 100px;
+  height: 90px;
+  position: absolute;
+}
+
+.hexagon > h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1.875em;
+  text-anchor: middle;
+}
+
+#hive {
+  margin: 0;
+  margin-left: 25%;
+  padding: 0;
+}
+
+li {
+  text-transform: capitalize;
+}
+
+div > span {
+}
+
+input {
+}

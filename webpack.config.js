@@ -2,6 +2,8 @@
 
 const { resolve } = require("path");
 
+const nodeExternals = require("webpack-node-externals");
+
 module.exports = {
   entry: ["babel-polyfill", "./client/index.js"],
   output: {
@@ -22,5 +24,10 @@ module.exports = {
         loader: "babel-loader",
       },
     ],
+  },
+  // target: "node",
+  // externals: [nodeExternals()],
+  node: {
+    fs: "empty",
   },
 };
