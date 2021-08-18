@@ -6,7 +6,7 @@ import guessedWordsReducer from "./guessedWords";
 const appReducer = combineReducers({
   beeData: beeDataReducer,
   entryField: entryFieldReducer,
-  guessedWords: guessedWordsReducer,
+  // guessedWords: guessedWordsReducer,
 });
 
 export default appReducer;

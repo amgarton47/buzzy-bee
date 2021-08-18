@@ -11,7 +11,6 @@ const Routes = () => {
         <nav>
           {/* <div>Welcome!</div> */}
           <Link to="/">Today's Bee</Link>
-          <br></br>
           <Link to="/yesterday">Yesterday's Bee</Link>
         </nav>
 

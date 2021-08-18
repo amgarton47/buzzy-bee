@@ -31,14 +31,45 @@
   margin: 0;
   margin-left: 25%;
   padding: 0;
+  width: 200px;
+  height: 200px;
 }
 
 li {
   text-transform: capitalize;
 }
 
-/* div > span {
+#form > form > input {
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-rendering: optimizeLegibility;
+  line-height: 1.25;
+  height: 1.25em;
+  /* width: 100%; */
+  font-size: 2em;
+  /* padding-top: 2px; */
+  text-align: center;
+  position: relative;
+  content: "";
+  display: block;
+  /* position: absolute; */
+  /* color: #e6e6e6; */
+  border: none;
 }
 
-input {
+#form > form > input:focus {
+  outline: none;
+}
+
+/* #form > form > input::after {
+  content: "asdfsdfsd";
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 1.25em;
+  background: #f7da21;
+  -webkit-animation: 1000ms blink step-end infinite;
+  animation: 1000ms blink step-end infinite;
 } */

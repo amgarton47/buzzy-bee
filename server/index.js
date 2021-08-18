@@ -3,6 +3,7 @@ const app = express();
 const PORT = 8080;
 const path = require("path");
 const cors = require("cors");
+// const bodyParser = require("body-parser");
 
 // var allowCrossDomain = function (req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*");
@@ -14,6 +15,8 @@ const cors = require("cors");
 // app.use(allowCrossDomain);
 
 // app.use(cors());
+
+// app.use(bodyParser());
 
 app.use(express.static(path.join(__dirname, "..", "public")));
 

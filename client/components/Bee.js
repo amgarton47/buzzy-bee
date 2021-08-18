@@ -1,11 +1,11 @@
-import React from "react";
-import { useEffect, memo } from "react";
+import React, { useEffect, memo } from "react";
 import { connect } from "react-redux";
 import { fetchBeeDataThunk } from "../redux/beeData";
-import { setEntryField } from "../redux/entryField";
-import { addCorrectGuess } from "../redux/guessedWords";
 
 import Hex from "./Hex";
+import EntryForm from "./EntryForm";
+import FoundWords from "./FoundWords";
+import ControlButtons from "./ControlButtons";
 
 const offsetValues = [
   { x: "0%", y: "0%" },
@@ -16,118 +16,11 @@ const offsetValues = [
   { x: "-80%", y: "150%" },
 ];
 
-// class TodaysBee extends React.PureComponent {
-//   constructor(props) {
-//     super(props);
-
-//     this.componentDidMount = this.componentDidMount.bind(this);
-//     this.handleChange = this.handleChange.bind(this);
-//     this.handleSubmit = this.handleSubmit.bind(this);
-//   }
-
-//   componentDidMount() {
-//     this.props.getBeeData();
-//   }
-
-//   handleSubmit(evt) {
-//     evt.preventDefault();
-//     const { answers, addCorrectGuess, entryValue, setEntryField } = this.props;
-//     const caseSensitiveEntry = entryValue.toLowerCase();
-
-//     if (answers.indexOf(caseSensitiveEntry) > -1) {
-//       addCorrectGuess(caseSensitiveEntry);
-//     }
-//     setEntryField("");
-//   }
-
-//   handleChange(evt) {
-//     this.props.setEntryField(evt.target.value);
-//   }
-
-//   render() {
-//     return (
-//       <div>
-//         <br></br>
-//         <div>
-//           Spelling Bee <span>{this.props.displayDate}</span>
-//         </div>
-//         <br></br>
-//         <form onSubmit={this.handleSubmit}>
-//           <label htmlFor="inputField"></label>
-//           <input
-//             name="inputField"
-//             type="text"
-//             onChange={this.handleChange}
-//             placeholder="Type or click"
-//             value={this.props.entryValue}
-//             autoComplete="off"
-//           ></input>
-//         </form>
-//         <div>
-//           {/* <h3>Center letter: {this.props.centerLetter}</h3>
-//           <h3>Outter letter: {this.props.outerLetters.join(" ")}</h3> */}
-//           <span>
-//             You have found {this.props.correctGuesses.length} word
-//             {this.props.correctGuesses.length == 1 ? "" : "s"}
-//           </span>
-//           <ul>
-//             {this.props.correctGuesses.map((guess) => (
-//               <li>{guess}</li>
-//             ))}
-//           </ul>
-//         </div>
-//         <div id="hive">
-//           <Hex
-//             letter={this.props.centerLetter}
-//             offset={{ x: "0%", y: "100%" }}
-//             isCenterTile={true}
-//           ></Hex>
-//           {this.props.outerLetters.map((letter, idx) => (
-//             <Hex letter={letter} offset={offsetValues[idx]} key={idx}></Hex>
-//           ))}
-//         </div>
-//       </div>
-//     );
-//   }
-// }
-
-// const mapState = (state) => ({
-//   centerLetter: state.beeData.centerLetter,
-//   outerLetters: state.beeData.outerLetters,
-//   answers: state.beeData.answers,
-//   validLetters: state.beeData.validLetters,
-//   pangrams: state.beeData.pangrams,
-//   displayDate: state.beeData.displayDate,
-//   entryValue: state.entryField.entryField,
-//   correctGuesses: state.guessedWords.guesses,
-// });
-// const mapDispatch = (dispatch) => ({
-//   getBeeData: () => dispatch(fetchBeeDataThunk()),
-//   setEntryField: (text) => dispatch(setEntryField(text)),
-//   addCorrectGuess: (guess) => dispatch(addCorrectGuess(guess)),
-// });
-
-// export default connect(mapState, mapDispatch)(TodaysBee);
-
 const Bee = (props) => {
   useEffect(() => {
     props.getBeeData();
-  });
-
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    const { answers, addCorrectGuess, entryValue, setEntryField } = props;
-    const caseSensitiveEntry = entryValue.toLowerCase();
-
-    if (answers.indexOf(caseSensitiveEntry) > -1) {
-      addCorrectGuess(caseSensitiveEntry);
-    }
-    setEntryField("");
-  };
-
-  const handleChange = (evt) => {
-    props.setEntryField(evt.target.value);
-  };
+    document.getElementById("formInput").focus();
+  }, []);
 
   return (
     <div>
@@ -136,37 +29,30 @@ const Bee = (props) => {
         Spelling Bee <span>{props.displayDate}</span>
       </div>
       <br></br>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="inputField"></label>
-        <input
-          name="inputField"
-          type="text"
-          onChange={handleChange}
-          placeholder="Type or click"
-          value={props.entryValue}
-          autoComplete="off"
-        ></input>
-      </form>
-      <div>
-        <span>
-          You have found {props.correctGuesses.length} word
-          {props.correctGuesses.length == 1 ? "" : "s"}
-        </span>
-        <ul>
-          {props.correctGuesses.map((guess, idx) => (
-            <li key={idx}>{guess}</li>
+
+      <EntryForm />
+      <FoundWords />
+      <div
+        style={
+          {
+            // display: "flex",
+            // flexDirection: "column",
+            // justifyContent: "space-around",
+          }
+        }
+      >
+        <div id="hive">
+          <Hex
+            letter={props.centerLetter}
+            offset={{ x: "0%", y: "100%" }}
+            isCenterTile={true}
+          ></Hex>
+          {props.outerLetters.map((letter, idx) => (
+            <Hex letter={letter} offset={offsetValues[idx]} key={idx}></Hex>
           ))}
-        </ul>
-      </div>
-      <div id="hive">
-        <Hex
-          letter={props.centerLetter}
-          offset={{ x: "0%", y: "100%" }}
-          isCenterTile={true}
-        ></Hex>
-        {props.outerLetters.map((letter, idx) => (
-          <Hex letter={letter} offset={offsetValues[idx]} key={idx}></Hex>
-        ))}
+        </div>
+
+        <ControlButtons />
       </div>
     </div>
   );
@@ -175,17 +61,13 @@ const Bee = (props) => {
 const mapState = (state) => ({
   centerLetter: state.beeData.centerLetter,
   outerLetters: state.beeData.outerLetters,
-  answers: state.beeData.answers,
-  validLetters: state.beeData.validLetters,
-  pangrams: state.beeData.pangrams,
+  // validLetters: state.beeData.validLetters,
+  // pangrams: state.beeData.pangrams,
   displayDate: state.beeData.displayDate,
-  entryValue: state.entryField.entryField,
-  correctGuesses: state.guessedWords.guesses,
 });
+
 const mapDispatch = (dispatch) => ({
   getBeeData: () => dispatch(fetchBeeDataThunk()),
-  setEntryField: (text) => dispatch(setEntryField(text)),
-  addCorrectGuess: (guess) => dispatch(addCorrectGuess(guess)),
 });
 
 export default connect(mapState, mapDispatch)(memo(Bee));
