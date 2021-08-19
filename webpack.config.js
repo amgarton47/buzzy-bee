@@ -2,10 +2,8 @@
 
 const { resolve } = require("path");
 
-const nodeExternals = require("webpack-node-externals");
-
 module.exports = {
-  entry: ["babel-polyfill", "./client/index.js"],
+  entry: ["@babel/polyfill", "./client/index.js"],
   output: {
     path: __dirname,
     filename: "./public/bundle.js",
@@ -22,6 +20,10 @@ module.exports = {
         test: /jsx?$/,
         include: resolve(__dirname, "client"),
         loader: "babel-loader",
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
       },
     ],
   },
