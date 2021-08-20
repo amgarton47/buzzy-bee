@@ -11,10 +11,26 @@
   text-align: center;
 }
 
+.hex-letter:hover {
+  cursor: pointer;
+}
+
 .hexagon {
   width: 100px;
   height: 90px;
   position: absolute;
+}
+
+.hexagon:hover polygon {
+  /* stroke:  !important;
+  fill: ; */
+  /* filter: brightness(0.95); */
+}
+
+a:active polygon {
+  transform: scale3d(0.86, 0.86, 1) !important;
+  filter: brightness(0.85) !important;
+  transform-origin: center center;
 }
 
 .hexagon > h1 {
@@ -77,3 +93,15 @@ li {
   -webkit-animation: 1000ms blink step-end infinite;
   animation: 1000ms blink step-end infinite;
 } */
+
+.yellow {
+  color: #f7da21;
+}
+
+.valid {
+  color: black;
+}
+
+.invalid {
+  color: lightgray;
+}

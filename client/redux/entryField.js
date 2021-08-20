@@ -1,5 +1,3 @@
-import { shuffleLetters } from "./beeData";
-
 const SET_ENTRY_FIELD = "SET_ENTRY_FIELD";
 const CHOP_ENTRY_FIELD = "CHOP_ENTRY_FIELD";
 

@@ -5,13 +5,18 @@ import { setEntryField } from "../redux/entryField";
 
 const Hex = (props) => {
   return (
-    <div
+    <a
       className="hexagon"
       style={{ transform: `translate(${props.offset.x},${props.offset.y})` }}
       onClick={() => {
-        props.setEntryField(`${props.entryValue}${props.letter}`);
-        document.getElementById("formInput").focus();
+        props.setEntryField(props.entryValue + props.letter);
       }}
+      // onMouseOver={() => {
+      //   document
+      //     .getElementsByTagName("polygon")[0]
+      //     .classList.toggle("mouseOver");
+      //   console.log("yo");
+      // }}
     >
       <h1 className="hex-letter">{props.letter}</h1>
       <Hexagon
@@ -21,7 +26,7 @@ const Hex = (props) => {
           fill: props.isCenterTile ? "#f7da21" : "#e6e6e6",
         }}
       ></Hexagon>
-    </div>
+    </a>
   );
 };
 
@@ -30,7 +35,7 @@ const mapState = (state) => ({
 });
 
 const mapDispatch = (dispatch) => ({
-  setEntryField: (text) => dispatch(setEntryField(text)),
+  setEntryField: (character) => dispatch(setEntryField(character)),
 });
 
 export default connect(mapState, mapDispatch)(memo(Hex));

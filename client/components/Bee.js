@@ -1,11 +1,15 @@
 import React, { useEffect, memo } from "react";
 import { connect } from "react-redux";
-import { fetchBeeDataThunk } from "../redux/beeData";
+import { fetchBeeDataThunk, makeGuess } from "../redux/beeData";
 
 import Hex from "./Hex";
 import EntryForm from "./EntryForm";
 import FoundWords from "./FoundWords";
 import ControlButtons from "./ControlButtons";
+
+import { setEntryField, chopEntryField } from "../redux/entryField";
+
+const allowedCharacters = "abcdefghijklmnopqrstuvwxyz";
 
 const offsetValues = [
   { x: "0%", y: "0%" },
@@ -19,18 +23,35 @@ const offsetValues = [
 const Bee = (props) => {
   useEffect(() => {
     props.getBeeData();
-    document.getElementById("formInput").focus();
+    // document.getElementById("formInput").focus();
   }, []);
 
+  const handleKeyDown = (evt) => {
+    switch (evt.key) {
+      case "Enter":
+        props.makeGuess(props.entryValue);
+        props.setEntryField("");
+      case "Backspace":
+        props.chopEntryField();
+      default:
+        const lowerCaseKey = evt.key.toLowerCase();
+        if (allowedCharacters.includes(lowerCaseKey)) {
+          props.setEntryField(props.entryValue + lowerCaseKey);
+        }
+      // console.log(evt.key);
+    }
+  };
+
   return (
-    <div>
+    <div style={{ outline: "none" }} onKeyDown={handleKeyDown} tabIndex="0">
       <br></br>
       <div>
         Spelling Bee <span>{props.displayDate}</span>
       </div>
       <br></br>
 
-      <EntryForm />
+      <span>{props.entryValue}</span>
+      {/* <EntryForm /> */}
       <FoundWords />
       <div
         style={
@@ -69,10 +90,14 @@ const mapState = (state) => ({
   answers: state.beeData.answers,
   playerScore: state.beeData.playerScore,
   playerRank: state.beeData.playerRank,
+  entryValue: state.entryField.entryField,
 });
 
 const mapDispatch = (dispatch) => ({
   getBeeData: () => dispatch(fetchBeeDataThunk()),
+  setEntryField: (text) => dispatch(setEntryField(text)),
+  chopEntryField: () => dispatch(chopEntryField()),
+  makeGuess: (guess) => dispatch(makeGuess(guess)),
 });
 
 export default connect(mapState, mapDispatch)(memo(Bee));
