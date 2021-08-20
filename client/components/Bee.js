@@ -41,6 +41,8 @@ const Bee = (props) => {
           }
         }
       >
+        <div>Score: {props.playerScore}</div>
+        <div>Rank: {props.playerRank}</div>
         <div id="hive">
           <Hex
             letter={props.centerLetter}
@@ -62,8 +64,11 @@ const mapState = (state) => ({
   centerLetter: state.beeData.centerLetter,
   outerLetters: state.beeData.outerLetters,
   // validLetters: state.beeData.validLetters,
-  // pangrams: state.beeData.pangrams,
+  pangrams: state.beeData.pangrams,
   displayDate: state.beeData.displayDate,
+  answers: state.beeData.answers,
+  playerScore: state.beeData.playerScore,
+  playerRank: state.beeData.playerRank,
 });
 
 const mapDispatch = (dispatch) => ({
