@@ -11,14 +11,10 @@ const Hex = (props) => {
       onClick={() => {
         props.setEntryField(props.entryValue + props.letter);
       }}
-      // onMouseOver={() => {
-      //   document
-      //     .getElementsByTagName("polygon")[0]
-      //     .classList.toggle("mouseOver");
-      //   console.log("yo");
-      // }}
     >
-      <h1 className="hex-letter">{props.letter}</h1>
+      <p className={`${!props.isCenterTile && "outter-hex-letter"} hex-letter`}>
+        {props.letter}
+      </p>
       <Hexagon
         flatTop={true}
         style={{

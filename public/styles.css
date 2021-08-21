@@ -21,10 +21,54 @@
   position: absolute;
 }
 
+.fade-in {
+  animation: fadeIn ease 0.25s;
+}
+
+.fade-out {
+  animation: fadeOut ease 0.35s;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* [contentEditable="true"]:empty:not(:focus):before {
+  content: "hello";
+  color: grey;
+  font-style: italic;
+} */
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .hexagon:hover polygon {
-  /* stroke:  !important;
-  fill: ; */
-  /* filter: brightness(0.95); */
+  filter: brightness(0.95);
+}
+
+#inputForm {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-rendering: optimizeLegibility;
+  line-height: 1.25;
+  height: 1.25em;
+  width: 100%;
+  font-size: 2em;
+  padding-top: 2px;
+  text-align: center;
+  position: relative;
 }
 
 a:active polygon {
@@ -33,7 +77,7 @@ a:active polygon {
   transform-origin: center center;
 }
 
-.hexagon > h1 {
+.hexagon > p {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,14 +85,60 @@ a:active polygon {
   font-weight: 600;
   font-size: 1.875em;
   text-anchor: middle;
+  /* height: 20px;
+  width: 20px; */
+}
+
+.hive-buttons-panel {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.hive-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+  width: 5.5em;
+  min-width: 5.5em;
+  height: 3em;
+  background-color: white;
+  font-size: 1em;
+  margin: 0 8px;
+  color: #333;
+  border: 1px solid #dcdcdc;
+  border-radius: 2.5em;
+  letter-spacing: 0.01em;
+  /* -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; */
+  cursor: pointer;
+  outline: none;
+}
+
+.shuffle-button {
+  background: url(./download.svg) center no-repeat;
+  background-size: 60%;
+  height: 3em;
+  width: 3em;
+  min-width: 3em;
+}
+
+.hive-button:active {
+  background-color: #ededed;
+  /* transition: background-color 200ms; */
 }
 
 #hive {
   margin: 0;
   margin-left: 25%;
   padding: 0;
-  width: 200px;
-  height: 200px;
+  /* display: inline-block; */
 }
 
 li {
@@ -77,11 +167,6 @@ li {
 #form > form > input:focus {
   outline: none;
 }
-
-.animate {
-  transition: transform 0.35s ease-in-out;
-}
-
 /* #form > form > input::after {
   content: "asdfsdfsd";
   display: block;
@@ -94,7 +179,7 @@ li {
   animation: 1000ms blink step-end infinite;
 } */
 
-.yellow {
+.center-letter {
   color: #f7da21;
 }
 
@@ -103,5 +188,5 @@ li {
 }
 
 .invalid {
-  color: lightgray;
+  color: #dcdcdc;
 }

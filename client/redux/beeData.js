@@ -98,7 +98,7 @@ const beeDataReducer = (state = initialState, action) => {
       return {
         ...state,
         centerLetter,
-        outerLetters,
+        outerLetters: shuffle(outerLetters),
         validLetters,
         pangrams,
         answers,

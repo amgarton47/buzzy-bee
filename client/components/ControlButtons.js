@@ -4,33 +4,47 @@ import { connect } from "react-redux";
 import { chopEntryField, setEntryField } from "../redux/entryField";
 import { makeGuess, shuffleLetters } from "../redux/beeData";
 
+// let isShuffling = false;
+
 const ControlButtons = (props) => {
   return (
-    <div style={{ display: "flex" }}>
+    <div className="hive-buttons-panel">
       <button
-        onClick={(evt) => {
-          //   evt.preventDefault();
+        className="hive-button"
+        onMouseDown={() => {
           props.chopEntryField();
-          document.getElementById("formInput").focus();
         }}
       >
         Delete
       </button>
       <button
-        onClick={(evt) => {
-          //   evt.preventDefault();
-          props.shuffleLetters();
-          document.getElementById("formInput").focus();
+        className="hive-button shuffle-button"
+        onMouseDown={() => {
+          if (!window.isShuffling) {
+            window.isShuffling = true;
+            Array.from(
+              document.getElementsByClassName("outter-hex-letter")
+            ).forEach((letterNode) => {
+              letterNode.classList.toggle("fade-out");
+              setTimeout(() => {
+                props.shuffleLetters();
+                letterNode.classList.toggle("fade-out");
+                letterNode.classList.toggle("fade-in");
+                setTimeout(() => {
+                  // letterNode.classList.toggle("fade-in");
+                  letterNode.classList.toggle("fade-in");
+                  window.isShuffling = false;
+                }, 250);
+              }, 350);
+            });
+          }
         }}
-      >
-        shuffle
-      </button>
+      ></button>
       <button
-        onClick={(evt) => {
-          //   evt.preventDefault();
+        className="hive-button"
+        onMouseDown={() => {
           props.makeGuess(props.entryValue);
           props.setEntryField("");
-          document.getElementById("formInput").focus();
         }}
       >
         Enter
