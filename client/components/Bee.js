@@ -2,10 +2,9 @@ import React, { useEffect, memo } from "react";
 import { connect } from "react-redux";
 import { fetchBeeDataThunk, makeGuess, shuffleLetters } from "../redux/beeData";
 
-import Hex from "./Hex";
-import EntryForm from "./EntryForm";
 import FoundWords from "./FoundWords";
 import ControlButtons from "./ControlButtons";
+import Comb from "./Comb";
 
 import hotkeys from "hotkeys-js";
 
@@ -13,22 +12,12 @@ import { setEntryField, chopEntryField } from "../redux/entryField";
 
 const allowedCharacters = "abcdefghijklmnopqrstuvwxyz";
 
-const offsetValues = [
-  { x: "0%", y: "0%" },
-  { x: "0%", y: "200%" },
-  { x: "80%", y: "50%" },
-  { x: "80%", y: "150%" },
-  { x: "-80%", y: "50%" },
-  { x: "-80%", y: "150%" },
-];
-
 const Bee = (props) => {
   useEffect(() => {
     props.getBeeData();
     document.getElementById("bee").focus();
   }, []);
 
-  let isShuffling = false;
   window.isShuffling = false;
 
   const handleKeyDown = (evt) => {
@@ -50,7 +39,7 @@ const Bee = (props) => {
         if (!window.isShuffling) {
           window.isShuffling = true;
           Array.from(
-            document.getElementsByClassName("outter-hex-letter")
+            document.getElementsByClassName("outer-cell-letter")
           ).forEach((letterNode) => {
             letterNode.classList.toggle("fade-out");
             setTimeout(() => {
@@ -58,10 +47,9 @@ const Bee = (props) => {
               letterNode.classList.toggle("fade-out");
               letterNode.classList.toggle("fade-in");
               setTimeout(() => {
-                // letterNode.classList.toggle("fade-in");
                 letterNode.classList.toggle("fade-in");
-                window.isShuffling = false;
               }, 250);
+              window.isShuffling = false;
             }, 350);
           });
         }
@@ -89,51 +77,38 @@ const Bee = (props) => {
       </div>
       <br></br>
 
-      <span placeholder="Type or click" id="inputForm">
-        {props.entryValue.split("").map((letter, idx) => (
-          <span
-            key={idx}
-            className={[
-              letter == props.centerLetter && "center-letter",
-              props.validLetters.includes(letter) &&
-                letter != props.centerLetter &&
-                "valid",
-              !props.validLetters.includes(letter) && "invalid",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-            style={{ display: "inline" }}
-          >
-            {letter}
-          </span>
-        ))}
-      </span>
+      <div className="controls-box">
+        <div className="control-panel">
+          <div id="inputBox">
+            <span id="inputForm">
+              {props.entryValue.split("").map((letter, idx) => (
+                <span
+                  key={idx}
+                  className={[
+                    letter == props.centerLetter && "center-letter",
+                    props.validLetters.includes(letter) &&
+                      letter != props.centerLetter &&
+                      "valid",
+                    !props.validLetters.includes(letter) && "invalid",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                >
+                  {letter}
+                </span>
+              ))}
+              {/* <span className="blink"></span> */}
+            </span>
+          </div>
+          <Comb />
+          <ControlButtons />
+        </div>
+      </div>
 
-      {/* <EntryForm /> */}
       <FoundWords />
-      <div
-        style={
-          {
-            // display: "flex",
-            // flexDirection: "column",
-            // justifyContent: "space-around",
-          }
-        }
-      >
+      <div>
         <div>Score: {props.playerScore}</div>
         <div>Rank: {props.playerRank}</div>
-        <div id="hive">
-          <Hex
-            letter={props.centerLetter}
-            offset={{ x: "0%", y: "100%" }}
-            isCenterTile={true}
-          ></Hex>
-          {props.outerLetters.map((letter, idx) => (
-            <Hex letter={letter} offset={offsetValues[idx]} key={idx}></Hex>
-          ))}
-        </div>
-
-        <ControlButtons />
       </div>
     </div>
   );

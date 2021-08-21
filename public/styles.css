@@ -1,9 +1,18 @@
 * {
-  display: block;
+  /* display: block; */
   font-family: Poppins;
 }
 
-.hex-letter {
+body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+.cell-letter {
   position: absolute;
   margin: 0;
   width: inherit;
@@ -11,7 +20,7 @@
   text-align: center;
 }
 
-.hex-letter:hover {
+.cell-letter:hover {
   cursor: pointer;
 }
 
@@ -19,6 +28,80 @@
   width: 100px;
   height: 90px;
   position: absolute;
+}
+
+:root {
+  --p0x: 50%;
+  --p0y: 0%;
+
+  --p1x: 50%;
+  --p1y: 200%;
+
+  --p2x: 130%;
+  --p2y: 50%;
+
+  --p3x: 130%;
+  --p3y: 150%;
+
+  --p4x: -30%;
+  --p4y: 50%;
+
+  --p5x: -30%;
+  --p5y: 150%;
+
+  --p6x: 50%;
+  --p6y: 0%;
+
+  --p7x: 50%;
+  --p7y: 100%;
+}
+
+/* js version is just 9 line lol... : */
+/* style={{ transform: `translate(${props.offset.x},${props.offset.y})` }} */
+/* const offsetValues = [
+  { x: "0%", y: "0%" },
+  { x: "0%", y: "200%" },
+  { x: "80%", y: "50%" },
+  { x: "80%", y: "150%" },
+  { x: "-80%", y: "50%" },
+  { x: "-80%", y: "150%" },
+]; */
+#comb > a:nth-child(1) {
+  transform: translate(var(--p7x), var(--p7y));
+}
+
+#comb > a:nth-child(2) {
+  transform: translate(var(--p0x), var(--p0y));
+}
+
+#comb > a:nth-child(3) {
+  transform: translate(var(--p1x), var(--p1y));
+}
+
+#comb > a:nth-child(4) {
+  transform: translate(var(--p2x), var(--p2y));
+}
+
+#comb > a:nth-child(5) {
+  transform: translate(var(--p3x), var(--p3y));
+}
+
+#comb > a:nth-child(6) {
+  transform: translate(var(--p4x), var(--p4y));
+}
+#comb > a:nth-child(7) {
+  transform: translate(var(--p5x), var(--p5y));
+}
+
+#comb > a {
+  margin-left: 10.25%;
+}
+
+#comb {
+  position: relative;
+  width: 260px;
+  height: 268px;
+  padding: 20px;
 }
 
 .fade-in {
@@ -38,12 +121,6 @@
   }
 }
 
-/* [contentEditable="true"]:empty:not(:focus):before {
-  content: "hello";
-  color: grey;
-  font-style: italic;
-} */
-
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -57,18 +134,14 @@
   filter: brightness(0.95);
 }
 
-#inputForm {
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-rendering: optimizeLegibility;
-  line-height: 1.25;
-  height: 1.25em;
-  width: 100%;
-  font-size: 2em;
-  padding-top: 2px;
-  text-align: center;
-  position: relative;
+.center-cell > polygon {
+  stroke: #f7da21 !important;
+  fill: #f7da21 !important;
+}
+
+.outer-cell > polygon {
+  stroke: #e6e6e6 !important;
+  fill: #e6e6e6 !important;
 }
 
 a:active polygon {
@@ -82,11 +155,9 @@ a:active polygon {
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
-  font-weight: 600;
-  font-size: 1.875em;
+  font-weight: 650;
+  font-size: 1.6em;
   text-anchor: middle;
-  /* height: 20px;
-  width: 20px; */
 }
 
 .hive-buttons-panel {
@@ -113,10 +184,6 @@ a:active polygon {
   border: 1px solid #dcdcdc;
   border-radius: 2.5em;
   letter-spacing: 0.01em;
-  /* -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none; */
   cursor: pointer;
   outline: none;
 }
@@ -131,53 +198,11 @@ a:active polygon {
 
 .hive-button:active {
   background-color: #ededed;
-  /* transition: background-color 200ms; */
-}
-
-#hive {
-  margin: 0;
-  margin-left: 25%;
-  padding: 0;
-  /* display: inline-block; */
 }
 
 li {
   text-transform: capitalize;
 }
-
-#form > form > input {
-  text-transform: uppercase;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  text-rendering: optimizeLegibility;
-  line-height: 1.25;
-  height: 1.25em;
-  /* width: 100%; */
-  font-size: 2em;
-  /* padding-top: 2px; */
-  text-align: center;
-  position: relative;
-  content: "";
-  display: block;
-  /* position: absolute; */
-  /* color: #e6e6e6; */
-  border: none;
-}
-
-#form > form > input:focus {
-  outline: none;
-}
-/* #form > form > input::after {
-  content: "asdfsdfsd";
-  display: block;
-  position: absolute;
-  top: 0;
-  width: 2px;
-  height: 1.25em;
-  background: #f7da21;
-  -webkit-animation: 1000ms blink step-end infinite;
-  animation: 1000ms blink step-end infinite;
-} */
 
 .center-letter {
   color: #f7da21;
@@ -189,4 +214,89 @@ li {
 
 .invalid {
   color: #dcdcdc;
+}
+
+/* *,
+*:before,
+*:after {
+  box-sizing: inherit; 
+}*/
+
+.controls-box {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.control-panel {
+  width: 80vw;
+  max-width: 290px;
+  z-index: 3;
+  padding-bottom: 45px;
+  opacity: 1;
+  transition: opacity 150ms 200ms ease;
+  position: relative;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#inputBox {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-rendering: optimizeLegibility;
+  line-height: 1.25;
+  height: 1.25em;
+  width: 100%;
+  font-size: 2em;
+  padding-top: 2px;
+  text-align: center;
+  position: relative;
+  max-width: 101%;
+  overflow: hidden;
+}
+
+#inputForm {
+  height: 100%;
+  display: inline-block;
+  position: relative;
+  min-width: 1px;
+  /* max-width: 99%; */
+  /* overflow: hidden; */
+  font-size: 1em;
+}
+
+#inputForm:empty::before {
+  content: "Type or click";
+  color: #959595;
+  text-transform: none;
+  font-weight: 300;
+  display: block;
+}
+
+#inputForm::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 1.25em;
+  background: #f7da21;
+  animation: blink-animation 1s steps(2, start) infinite;
+  -webkit-animation: blink-animation 1s steps(2, start) infinite;
+  right: -4px;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
 }

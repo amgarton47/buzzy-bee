@@ -16,7 +16,7 @@ const EntryForm = (props) => {
     setEntryField("");
   };
 
-  const handleChange = (evt, evt1) => {
+  const handleChange = (evt) => {
     // var sel = window.getSelection();
     // sel.collapseToEnd();
 
@@ -71,8 +71,6 @@ const EntryForm = (props) => {
         id="formInput"
         // contentEditable
         onKeyDown={handleChange}
-        style={{ outline: "none" }}
-        // onClick={handleClick}
       ></span>
       <div id="coloredWord">
         {console.log(props.entryValue)}
@@ -88,7 +86,6 @@ const EntryForm = (props) => {
             ]
               .filter(Boolean)
               .join(" ")}
-            style={{ display: "inline" }}
           >
             {letter}
           </span>

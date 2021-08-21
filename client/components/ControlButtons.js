@@ -23,7 +23,7 @@ const ControlButtons = (props) => {
           if (!window.isShuffling) {
             window.isShuffling = true;
             Array.from(
-              document.getElementsByClassName("outter-hex-letter")
+              document.getElementsByClassName("outer-cell-letter")
             ).forEach((letterNode) => {
               letterNode.classList.toggle("fade-out");
               setTimeout(() => {
@@ -31,10 +31,9 @@ const ControlButtons = (props) => {
                 letterNode.classList.toggle("fade-out");
                 letterNode.classList.toggle("fade-in");
                 setTimeout(() => {
-                  // letterNode.classList.toggle("fade-in");
                   letterNode.classList.toggle("fade-in");
-                  window.isShuffling = false;
                 }, 250);
+                window.isShuffling = false;
               }, 350);
             });
           }

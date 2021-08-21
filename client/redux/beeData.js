@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { calculateTotalScore, calculateWordScore } from "../utils";
+import { calculateTotalScore, calculateWordScore, shuffle } from "../utils";
 
 const SET_BEE_DATA = "SET_BEE_DATA";
 const SHUFFLE_LETTERS = "SHUFFLE_LETTERS";
@@ -32,26 +32,6 @@ const initialState = {
   playerScore: 0,
   playerRank: "Beginner",
 };
-
-function shuffle(array) {
-  var currentIndex = array.length,
-    randomIndex;
-
-  // While there remain elements to shuffle...
-  while (currentIndex != 0) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
-  }
-
-  return array;
-}
 
 const getRank = (score, answers, pangrams) => {
   const maxScore = calculateTotalScore(answers, pangrams);
