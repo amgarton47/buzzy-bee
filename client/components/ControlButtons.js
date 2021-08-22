@@ -4,21 +4,34 @@ import { connect } from "react-redux";
 import { chopEntryField, setEntryField } from "../redux/entryField";
 import { makeGuess, shuffleLetters } from "../redux/beeData";
 
-// let isShuffling = false;
+let deleteInterval;
 
 const ControlButtons = (props) => {
   return (
     <div className="hive-buttons-panel">
       <button
+        id="delete-button"
         className="hive-button"
         onMouseDown={() => {
           props.chopEntryField();
+
+          setTimeout(() => {
+            deleteInterval = setInterval(() => {
+              props.chopEntryField();
+              console.log("s");
+            }, 100);
+          }, 300);
+        }}
+        onMouseUp={() => {
+          clearInterval(deleteInterval);
         }}
       >
         Delete
       </button>
+
       <button
         className="hive-button shuffle-button"
+        id="shuffle-button"
         onMouseDown={() => {
           if (!window.isShuffling) {
             window.isShuffling = true;
@@ -38,9 +51,11 @@ const ControlButtons = (props) => {
             });
           }
         }}
-      ></button>
+      />
+
       <button
         className="hive-button"
+        id="enter-button"
         onMouseDown={() => {
           props.makeGuess(props.entryValue);
           props.setEntryField("");

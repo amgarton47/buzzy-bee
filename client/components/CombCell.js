@@ -8,7 +8,7 @@ const CombCell = (props) => {
   return (
     <a
       className="hexagon"
-      onClick={() => {
+      onMouseDown={() => {
         setEntryField(entryValue + letter);
       }}
     >

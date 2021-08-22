@@ -1,16 +1,20 @@
 import React, { useEffect, memo } from "react";
 import { connect } from "react-redux";
 import { fetchBeeDataThunk, makeGuess, shuffleLetters } from "../redux/beeData";
+import { setEntryField, chopEntryField } from "../redux/entryField";
 
 import FoundWords from "./FoundWords";
 import ControlButtons from "./ControlButtons";
 import Comb from "./Comb";
+import EntryField from "./EntryField";
 
 import hotkeys from "hotkeys-js";
 
-import { setEntryField, chopEntryField } from "../redux/entryField";
-
 const allowedCharacters = "abcdefghijklmnopqrstuvwxyz";
+
+// import $ from "jquery";
+// const a = $(".outer-letter");
+// console.log(a);
 
 const Bee = (props) => {
   useEffect(() => {
@@ -19,6 +23,24 @@ const Bee = (props) => {
   }, []);
 
   window.isShuffling = false;
+
+  const handleKeyUp = (evt) => {
+    switch (evt.key) {
+      case "Enter":
+        document
+          .getElementById("enter-button")
+          .classList.remove("hive-button-active");
+        break;
+      case "Backspace":
+        document
+          .getElementById("delete-button")
+          .classList.remove("hive-button-active");
+      case " ":
+        document
+          .getElementById("shuffle-button")
+          .classList.remove("hive-button-active");
+    }
+  };
 
   const handleKeyDown = (evt) => {
     // prevent keyboard shortcuts from entering letters
@@ -29,19 +51,45 @@ const Bee = (props) => {
     // handlekey down actions
     switch (evt.key) {
       case "Enter":
-        props.makeGuess(props.entryValue);
-        props.setEntryField("");
+        document
+          .getElementById("enter-button")
+          .classList.add("hive-button-active");
+        if (!props.entryValue == "") {
+          if (props.answers.includes(props.entryValue.toLowerCase())) {
+            props.makeGuess(props.entryValue);
+            props.setEntryField("");
+          } else {
+            document
+              .getElementById("inputForm")
+              .classList.toggle("animation-target");
+            setTimeout(() => {
+              props.setEntryField("");
+              document
+                .getElementById("inputForm")
+                .classList.toggle("animation-target");
+            }, 800);
+          }
+        }
         break;
       case "Backspace":
+        document
+          .getElementById("delete-button")
+          .classList.add("hive-button-active");
         props.chopEntryField();
         break;
       case " ":
         if (!window.isShuffling) {
+          document
+            .getElementById("shuffle-button")
+            .classList.add("hive-button-active");
+
           window.isShuffling = true;
+
           Array.from(
             document.getElementsByClassName("outer-cell-letter")
           ).forEach((letterNode) => {
             letterNode.classList.toggle("fade-out");
+
             setTimeout(() => {
               props.shuffleLetters();
               letterNode.classList.toggle("fade-out");
@@ -69,6 +117,7 @@ const Bee = (props) => {
       id="bee"
       style={{ outline: "none" }}
       onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
       tabIndex="0"
     >
       <br></br>
@@ -79,36 +128,25 @@ const Bee = (props) => {
 
       <div className="controls-box">
         <div className="control-panel">
-          <div id="inputBox">
-            <span id="inputForm">
-              {props.entryValue.split("").map((letter, idx) => (
-                <span
-                  key={idx}
-                  className={[
-                    letter == props.centerLetter && "center-letter",
-                    props.validLetters.includes(letter) &&
-                      letter != props.centerLetter &&
-                      "valid",
-                    !props.validLetters.includes(letter) && "invalid",
-                  ]
-                    .filter(Boolean)
-                    .join(" ")}
-                >
-                  {letter}
-                </span>
-              ))}
-              {/* <span className="blink"></span> */}
-            </span>
-          </div>
+          <EntryField />
           <Comb />
           <ControlButtons />
         </div>
-      </div>
 
-      <FoundWords />
-      <div>
-        <div>Score: {props.playerScore}</div>
-        <div>Rank: {props.playerRank}</div>
+        <div id="status-box">
+          <div id="progress-box">
+            {/* <div>Score: {props.playerScore}</div> */}
+            <h4>{props.playerRank}</h4>
+
+            <div id="progress-bar">
+              <div id="progress-line">
+                <div id="progress-dots"></div>
+              </div>
+              <div id="progress-line-marker"></div>
+            </div>
+          </div>
+          <FoundWords />
+        </div>
       </div>
     </div>
   );
@@ -117,8 +155,8 @@ const Bee = (props) => {
 const mapState = (state) => ({
   centerLetter: state.beeData.centerLetter,
   outerLetters: state.beeData.outerLetters,
-  validLetters: state.beeData.validLetters,
-  pangrams: state.beeData.pangrams,
+  // validLetters: state.beeData.validLetters,
+  // pangrams: state.beeData.pangrams,
   displayDate: state.beeData.displayDate,
   answers: state.beeData.answers,
   playerScore: state.beeData.playerScore,
