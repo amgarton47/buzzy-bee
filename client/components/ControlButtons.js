@@ -15,16 +15,16 @@ const ControlButtons = (props) => {
         onMouseDown={() => {
           props.chopEntryField();
 
-          setTimeout(() => {
-            deleteInterval = setInterval(() => {
-              props.chopEntryField();
-              console.log("s");
-            }, 100);
-          }, 300);
+          // setTimeout(() => {
+          //   deleteInterval = setInterval(() => {
+          //     props.chopEntryField();
+          //     console.log("s");
+          //   }, 100);
+          // }, 300);
         }}
-        onMouseUp={() => {
-          clearInterval(deleteInterval);
-        }}
+        // onMouseUp={() => {
+        //   clearInterval(deleteInterval);
+        // }}
       >
         Delete
       </button>

@@ -30,32 +30,32 @@ const initialState = {
   guesses: [],
   correctGuesses: [],
   playerScore: 0,
-  playerRank: "Beginner",
+  playerRank: { title: "Beginner", level: 0 },
 };
 
 const getRank = (score, answers, pangrams) => {
   const maxScore = calculateTotalScore(answers, pangrams);
   const pct = Math.round((score / maxScore) * 100);
   if (pct < 2) {
-    return "Beginner";
+    return { title: "Beginner", level: 0 };
   } else if (pct < 5) {
-    return "Good Start";
+    return { title: "Good Start", level: 1 };
   } else if (pct < 8) {
-    return "Moving Up";
+    return { title: "Moving Up", level: 2 };
   } else if (pct < 15) {
-    return "Good";
+    return { title: "Good", level: 3 };
   } else if (pct < 25) {
-    return "Solid";
+    return { title: "Solid", level: 4 };
   } else if (pct < 40) {
-    return "Nice";
+    return { title: "Nice", level: 5 };
   } else if (pct < 50) {
-    return "Great";
+    return { title: "Great", level: 6 };
   } else if (pct < 60) {
-    return "Amazing";
+    return { title: "Amazing", level: 7 };
   } else if (pct < 100) {
-    return "Genius";
+    return { title: "Genius", level: 8 };
   } else if (pct == 100) {
-    return "Queen Bee";
+    return { title: "Queen Bee!", level: 8 };
   }
 };
 

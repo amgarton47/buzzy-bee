@@ -4,18 +4,16 @@ import { connect } from "react-redux";
 const FoundWords = (props) => {
   const { foundWords } = props;
   return (
-    <div>
-      {/* <br></br>
-      <br></br>
-      <br></br>
-      <br></br> */}
+    <div className="wordlist-box">
       <span>
         You have found {foundWords.length} word
         {foundWords.length == 1 ? "" : "s"}
       </span>
       <ul>
         {foundWords.map((guess, idx) => (
-          <li key={idx}>{guess}</li>
+          <li key={idx}>
+            <span className="found-word">{guess}</span>
+          </li>
         ))}
       </ul>
     </div>

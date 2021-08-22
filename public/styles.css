@@ -188,6 +188,7 @@ a:active polygon {
   letter-spacing: 0.01em;
   cursor: pointer;
   outline: none;
+  user-select: none;
 }
 
 .shuffle-button {
@@ -206,8 +207,37 @@ a:active polygon {
   background-color: #ededed;
 }
 
-li {
+.found-word {
   text-transform: capitalize;
+}
+
+.wordlist-box {
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  /* margin: 12px; */
+  padding: 12px;
+  display: flex;
+  flex-flow: column wrap;
+  letter-spacing: 0.005em;
+}
+
+ul {
+  width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  align-content: flex-start;
+  height: calc(100% - 38px);
+  max-height: 200px !important;
+  padding: 20px 0 24px;
+}
+
+li {
+  padding: 4px 0 4px 1px;
+  margin-bottom: 7px;
+  border-bottom: 1px solid #dcdcdc;
+  list-style: none;
+  width: calc(33.33% - 25px);
+  margin-right: 25px;
 }
 
 .center-letter {
@@ -280,8 +310,9 @@ li {
   content: "Type or click";
   color: #959595;
   text-transform: none;
-  font-weight: 300;
+  font-weight: 400;
   display: block;
+  font-family: Inter, sans-serif;
 }
 
 #inputForm::after {
@@ -305,6 +336,69 @@ li {
   to {
     visibility: hidden;
   }
+}
+
+#progress-line {
+  position: relative;
+  height: 1px;
+  background: #dcdcdc;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#progress-box {
+  display: flex;
+  flex-direction: row;
+}
+
+#progress-bar {
+  margin-left: 12px;
+  flex-grow: 1;
+  position: relative;
+  min-width: calc(100% - 12px - 85px);
+  display: flex;
+  align-items: center;
+}
+
+#progress-dots {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.progress-dot {
+  display: block;
+  width: 0;
+  position: relative;
+}
+
+#progress-dots > .completed-dot::after {
+  background-color: #f7da21;
+}
+
+.progress-dot::after {
+  display: block;
+  width: 0;
+  position: relative;
+  content: "";
+  display: block;
+  position: absolute;
+  left: -4.5px;
+  top: -4.5px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: #dcdcdc;
+  transition: background-color 200ms 100ms ease;
+}
+
+#status-box {
+  width: 50%;
+}
+
+#control-panel {
+  width: 50%;
 }
 
 .animation-target {

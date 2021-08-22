@@ -44,7 +44,15 @@ const Bee = (props) => {
 
   const handleKeyDown = (evt) => {
     // prevent keyboard shortcuts from entering letters
-    hotkeys("command + *", () => {
+    hotkeys("command+r", () => {
+      props.setEntryField("");
+    });
+
+    hotkeys("command+s", () => {
+      props.setEntryField("");
+    });
+
+    hotkeys("command+a", () => {
       props.setEntryField("");
     });
 
@@ -136,15 +144,29 @@ const Bee = (props) => {
         <div id="status-box">
           <div id="progress-box">
             {/* <div>Score: {props.playerScore}</div> */}
-            <h4>{props.playerRank}</h4>
+            <h4>{props.playerRank.title}</h4>
 
             <div id="progress-bar">
               <div id="progress-line">
-                <div id="progress-dots"></div>
+                <div id="progress-dots">
+                  {Array(9)
+                    .fill("")
+                    .map((_, idx) => (
+                      <div
+                        key={idx}
+                        className={`progress-dot ${
+                          props.playerRank.level > idx - 1
+                            ? "completed-dot"
+                            : ""
+                        }`}
+                      ></div>
+                    ))}
+                </div>
               </div>
               <div id="progress-line-marker"></div>
             </div>
           </div>
+          <br></br>
           <FoundWords />
         </div>
       </div>
