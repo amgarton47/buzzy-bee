@@ -16,6 +16,7 @@ const Routes = () => {
 
         <Switch>
           <Route exact path="/" component={Bee}></Route>
+          <Route exact path="/:date" component={Bee}></Route>
           <Route exact path="/yesterday" component={YesterdaysBee}></Route>
         </Switch>
       </div>

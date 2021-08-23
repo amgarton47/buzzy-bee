@@ -9,10 +9,16 @@ const SHUFFLE_LETTERS = "SHUFFLE_LETTERS";
 const setBeeData = (data) => ({ type: SET_BEE_DATA, data });
 export const shuffleLetters = () => ({ type: SHUFFLE_LETTERS });
 
-export const fetchBeeDataThunk = () => async (dispatch) => {
+export const fetchBeeDataThunk = (date) => async (dispatch) => {
   axios
-    .get("/api/beeData/today")
-    .then(({ data }) => dispatch(setBeeData(data)))
+    .get(`/api/beeData/${date}`)
+    .then(({ data }) => {
+      if (data.centerLetter) {
+        dispatch(setBeeData(data));
+      } else {
+        window.location.assign("/today");
+      }
+    })
     .catch((err) => console.log(err));
 };
 
@@ -77,9 +83,9 @@ const beeDataReducer = (state = initialState, action) => {
       } = action.data;
       return {
         ...state,
-        centerLetter,
-        outerLetters: shuffle(outerLetters),
-        validLetters,
+        centerLetter: centerLetter.trim(),
+        outerLetters: shuffle(outerLetters.map((l) => l.trim())),
+        validLetters: validLetters.map((l) => l.trim()),
         pangrams,
         answers,
         displayDate,

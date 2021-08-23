@@ -18,7 +18,8 @@ const allowedCharacters = "abcdefghijklmnopqrstuvwxyz";
 
 const Bee = (props) => {
   useEffect(() => {
-    props.getBeeData();
+    props.getBeeData(props.match.params.date);
+    console.log(props.match.params.date);
     document.getElementById("bee").focus();
   }, []);
 
@@ -76,6 +77,36 @@ const Bee = (props) => {
                 .getElementById("inputForm")
                 .classList.toggle("animation-target");
             }, 800);
+
+            const msgBox = document.getElementsByClassName(
+              "message-box-content"
+            )[0];
+
+            if (props.entryValue.length < 4) {
+              msgBox.innerHTML = "Too short";
+            } else if (
+              !props.entryValue.toLowerCase().includes(props.centerLetter)
+            ) {
+              msgBox.innerHTML = "Missing center letter";
+            } else if (
+              !props.entryValue
+                .toLowerCase()
+                .split("")
+                .reduce(
+                  (acc, curr) => props.validLetters.includes(curr) && acc,
+                  true
+                )
+            ) {
+              msgBox.innerHTML = "Bad letters";
+            } else if (
+              !props.answers.includes(props.entryValue.toLowerCase())
+            ) {
+              msgBox.innerHTML = "Not in word list";
+            }
+
+            msgBox.style.opacity = "100%";
+
+            setTimeout(() => (msgBox.style.opacity = "0%"), 750);
           }
         }
         break;
@@ -112,10 +143,35 @@ const Bee = (props) => {
         evt.preventDefault();
         break;
       default:
-        const lowerCaseKey = evt.key.toLowerCase();
-        if (allowedCharacters.includes(lowerCaseKey)) {
-          props.setEntryField(props.entryValue + lowerCaseKey);
+        if (props.entryValue.length >= 13) {
+          document
+            .getElementById("inputForm")
+            .classList.toggle("animation-target");
+          setTimeout(() => {
+            props.setEntryField("");
+            document
+              .getElementById("inputForm")
+              .classList.toggle("animation-target");
+          }, 800);
+
+          const msgBox = document.getElementsByClassName(
+            "message-box-content"
+          )[0];
+
+          msgBox.innerHTML = "Too long";
+          msgBox.style.opacity = "100%";
+
+          setTimeout(() => {
+            msgBox.style.opacity = "0%";
+            props.setEntryField("");
+          }, 750);
+        } else {
+          const lowerCaseKey = evt.key.toLowerCase();
+          if (allowedCharacters.includes(lowerCaseKey)) {
+            props.setEntryField(props.entryValue + lowerCaseKey);
+          }
         }
+
         break;
     }
   };
@@ -136,6 +192,9 @@ const Bee = (props) => {
 
       <div className="controls-box">
         <div className="control-panel">
+          <div className="message-box">
+            <span className="message-box-content"></span>
+          </div>
           <EntryField />
           <Comb />
           <ControlButtons />
@@ -144,7 +203,19 @@ const Bee = (props) => {
         <div id="status-box">
           <div id="progress-box">
             {/* <div>Score: {props.playerScore}</div> */}
-            <h4>{props.playerRank.title}</h4>
+            <h4
+              style={{
+                padding: "10px",
+                left: "-100px",
+                // height: "1.875em",
+                // minWidth: "5em",
+                // fontWeight: "700",
+                // display: "flex",
+                // alignItems: "center",
+              }}
+            >
+              {props.playerRank.title}
+            </h4>
 
             <div id="progress-bar">
               <div id="progress-line">
@@ -163,7 +234,14 @@ const Bee = (props) => {
                     ))}
                 </div>
               </div>
-              <div id="progress-line-marker"></div>
+              <div
+                id="progress-line-marker"
+                style={{ left: `${12.5 * props.playerRank.level + 1}%` }}
+              >
+                <span id="progress-line-value" style={{ fontWeight: "100" }}>
+                  {props.playerScore}
+                </span>
+              </div>
             </div>
           </div>
           <br></br>
@@ -177,7 +255,7 @@ const Bee = (props) => {
 const mapState = (state) => ({
   centerLetter: state.beeData.centerLetter,
   outerLetters: state.beeData.outerLetters,
-  // validLetters: state.beeData.validLetters,
+  validLetters: state.beeData.validLetters,
   // pangrams: state.beeData.pangrams,
   displayDate: state.beeData.displayDate,
   answers: state.beeData.answers,
@@ -187,7 +265,7 @@ const mapState = (state) => ({
 });
 
 const mapDispatch = (dispatch) => ({
-  getBeeData: () => dispatch(fetchBeeDataThunk()),
+  getBeeData: (date) => dispatch(fetchBeeDataThunk(date)),
   setEntryField: (text) => dispatch(setEntryField(text)),
   chopEntryField: () => dispatch(chopEntryField()),
   makeGuess: (guess) => dispatch(makeGuess(guess)),
