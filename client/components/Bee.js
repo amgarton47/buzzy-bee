@@ -12,14 +12,9 @@ import hotkeys from "hotkeys-js";
 
 const allowedCharacters = "abcdefghijklmnopqrstuvwxyz";
 
-// import $ from "jquery";
-// const a = $(".outer-letter");
-// console.log(a);
-
 const Bee = (props) => {
   useEffect(() => {
     props.getBeeData(props.match.params.date);
-    console.log(props.match.params.date);
     document.getElementById("bee").focus();
   }, []);
 

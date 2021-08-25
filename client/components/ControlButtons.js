@@ -4,9 +4,54 @@ import { connect } from "react-redux";
 import { chopEntryField, setEntryField } from "../redux/entryField";
 import { makeGuess, shuffleLetters } from "../redux/beeData";
 
-let deleteInterval;
-
 const ControlButtons = (props) => {
+  const handleEnterPress = () => {
+    document.getElementById("enter-button").classList.add("hive-button-active");
+    if (!props.entryValue == "") {
+      if (props.answers.includes(props.entryValue.toLowerCase())) {
+        props.makeGuess(props.entryValue);
+        props.setEntryField("");
+      } else {
+        document
+          .getElementById("inputForm")
+          .classList.toggle("animation-target");
+        setTimeout(() => {
+          props.setEntryField("");
+          document
+            .getElementById("inputForm")
+            .classList.toggle("animation-target");
+        }, 800);
+
+        const msgBox = document.getElementsByClassName(
+          "message-box-content"
+        )[0];
+
+        if (props.entryValue.length < 4) {
+          msgBox.innerHTML = "Too short";
+        } else if (
+          !props.entryValue.toLowerCase().includes(props.centerLetter)
+        ) {
+          msgBox.innerHTML = "Missing center letter";
+        } else if (
+          !props.entryValue
+            .toLowerCase()
+            .split("")
+            .reduce(
+              (acc, curr) => props.validLetters.includes(curr) && acc,
+              true
+            )
+        ) {
+          msgBox.innerHTML = "Bad letters";
+        } else if (!props.answers.includes(props.entryValue.toLowerCase())) {
+          msgBox.innerHTML = "Not in word list";
+        }
+
+        msgBox.style.opacity = "100%";
+
+        setTimeout(() => (msgBox.style.opacity = "0%"), 750);
+      }
+    }
+  };
   return (
     <div className="hive-buttons-panel">
       <button
@@ -14,17 +59,7 @@ const ControlButtons = (props) => {
         className="hive-button"
         onMouseDown={() => {
           props.chopEntryField();
-
-          // setTimeout(() => {
-          //   deleteInterval = setInterval(() => {
-          //     props.chopEntryField();
-          //     console.log("s");
-          //   }, 100);
-          // }, 300);
         }}
-        // onMouseUp={() => {
-        //   clearInterval(deleteInterval);
-        // }}
       >
         Delete
       </button>
@@ -56,10 +91,7 @@ const ControlButtons = (props) => {
       <button
         className="hive-button"
         id="enter-button"
-        onMouseDown={() => {
-          props.makeGuess(props.entryValue);
-          props.setEntryField("");
-        }}
+        onMouseDown={handleEnterPress}
       >
         Enter
       </button>
@@ -69,6 +101,7 @@ const ControlButtons = (props) => {
 
 const mapState = (state) => ({
   entryValue: state.entryField.entryField,
+  answers: state.beeData.answers,
 });
 
 const mapDispatch = (dispatch) => ({

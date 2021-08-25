@@ -2,7 +2,10 @@ const express = require("express");
 const app = express();
 const PORT = 8080;
 const path = require("path");
-const cors = require("cors");
+
+const chalk = require("chalk");
+const { db } = require("./db");
+// const cors = require("cors");
 // const bodyParser = require("body-parser");
 
 // var allowCrossDomain = function (req, res, next) {
@@ -13,9 +16,7 @@ const cors = require("cors");
 // };
 
 // app.use(allowCrossDomain);
-
 // app.use(cors());
-
 // app.use(bodyParser());
 
 app.use(express.static(path.join(__dirname, "..", "public")));
@@ -26,4 +27,13 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "index.html"));
 }); // Send index.html for any other requests
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+const init = async () => {
+  try {
+    app.listen(PORT, async () => console.log(`Listening on port ${PORT}`));
+    db.sync({ force: true });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+init();
