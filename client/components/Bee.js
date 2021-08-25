@@ -1,6 +1,7 @@
 import React, { useEffect, memo } from "react";
 import { connect } from "react-redux";
 import { fetchBeeDataThunk, makeGuess, shuffleLetters } from "../redux/beeData";
+import { fetchGameDataThunk, addFoundWordThunk } from "../redux/gameData";
 import { setEntryField, chopEntryField } from "../redux/entryField";
 
 import FoundWords from "./FoundWords";
@@ -15,6 +16,7 @@ const allowedCharacters = "abcdefghijklmnopqrstuvwxyz";
 const Bee = (props) => {
   useEffect(() => {
     props.getBeeData(props.match.params.date);
+    props.getGameData(props.match.params.date);
     document.getElementById("bee").focus();
   }, []);
 
@@ -60,7 +62,8 @@ const Bee = (props) => {
           .classList.add("hive-button-active");
         if (!props.entryValue == "") {
           if (props.answers.includes(props.entryValue.toLowerCase())) {
-            props.makeGuess(props.entryValue);
+            // props.makeGuess(props.entryValue);
+            props.addFoundWord(props.entryValue, props.match.params.date);
             props.setEntryField("");
           } else {
             document
@@ -261,10 +264,12 @@ const mapState = (state) => ({
 
 const mapDispatch = (dispatch) => ({
   getBeeData: (date) => dispatch(fetchBeeDataThunk(date)),
+  getGameData: (date) => dispatch(fetchGameDataThunk(date)),
   setEntryField: (text) => dispatch(setEntryField(text)),
   chopEntryField: () => dispatch(chopEntryField()),
   makeGuess: (guess) => dispatch(makeGuess(guess)),
   shuffleLetters: () => dispatch(shuffleLetters()),
+  addFoundWord: (word, date) => dispatch(addFoundWordThunk(word, date)),
 });
 
 export default connect(mapState, mapDispatch)(memo(Bee));

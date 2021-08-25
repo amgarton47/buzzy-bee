@@ -21,7 +21,8 @@ const FoundWords = (props) => {
 };
 
 const mapState = (state) => ({
-  foundWords: state.beeData.correctGuesses,
+  // foundWords: state.beeData.correctGuesses,
+  foundWords: state.gameData.foundWords,
 });
 
 export default connect(mapState, null)(memo(FoundWords));

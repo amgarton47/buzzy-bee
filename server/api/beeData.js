@@ -6,7 +6,7 @@ const client = redis.createClient(redisPort);
 
 const cheerio = require("cheerio");
 const requestPromise = require("request-promise");
-const { default: axios } = require("axios");
+const axios = require("axios");
 
 const url = "https://www.nytimes.com/puzzles/spelling-bee";
 

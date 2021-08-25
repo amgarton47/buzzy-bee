@@ -19,6 +19,9 @@ const { db } = require("./db");
 // app.use(cors());
 // app.use(bodyParser());
 
+const bodyParser = require("body-parser");
+app.use(bodyParser());
+
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 app.use("/api", require("./api"));
@@ -30,7 +33,7 @@ app.get("*", (req, res) => {
 const init = async () => {
   try {
     app.listen(PORT, async () => console.log(`Listening on port ${PORT}`));
-    db.sync({ force: true });
+    await db.sync(/*{ force: true }*/);
   } catch (err) {
     console.log(err);
   }
