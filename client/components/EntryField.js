@@ -21,7 +21,6 @@ const EntryField = (props) => {
             {letter}
           </span>
         ))}
-        {/* <span className="blink"></span> */}
       </span>
     </div>
   );

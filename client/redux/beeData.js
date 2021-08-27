@@ -4,7 +4,8 @@ import { calculateTotalScore, calculateWordScore, shuffle } from "../utils";
 
 const SET_BEE_DATA = "SET_BEE_DATA";
 const SHUFFLE_LETTERS = "SHUFFLE_LETTERS";
-// const INCREMENT_SCORE = "INCREMENT_SCORE";
+const MAKE_GUESS = "MAKE_GUESS";
+const INCREMENT_SCORE = "INCREMENT_SCORE";
 
 const setBeeData = (data) => ({ type: SET_BEE_DATA, data });
 export const shuffleLetters = () => ({ type: SHUFFLE_LETTERS });
@@ -21,8 +22,6 @@ export const fetchBeeDataThunk = (date) => async (dispatch) => {
     })
     .catch((err) => console.log(err));
 };
-
-const MAKE_GUESS = "MAKE_GUESS";
 
 export const makeGuess = (guess) => ({ type: MAKE_GUESS, guess });
 
@@ -65,10 +64,10 @@ const getRank = (score, answers, pangrams) => {
   }
 };
 
-// export const incrementScore = (score) => ({
-//   type: INCREMENT_SCORE,
-//   score,
-// });
+export const incrementScore = (score) => ({
+  type: INCREMENT_SCORE,
+  score,
+});
 
 const beeDataReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -120,8 +119,8 @@ const beeDataReducer = (state = initialState, action) => {
       }
     case SHUFFLE_LETTERS:
       return { ...state, outerLetters: shuffle([...state.outerLetters]) };
-    // case INCREMENT_SCORE:
-    //   return { ...state, playerScore: state.playerScore + action.score };
+    case INCREMENT_SCORE:
+      return { ...state, playerScore: state.playerScore + action.score };
     default:
       return state;
   }

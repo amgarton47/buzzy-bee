@@ -16,10 +16,10 @@ export const fetchGameDataThunk = (date) => async (dispatch) => {
 };
 
 export const addFoundWordThunk = (newWord, date) => async (dispatch) => {
-  dispatch(addFoundWord(newWord));
+  // dispatch(addFoundWord(newWord));
   axios
     .put(`/api/gameData/${date}`, { newWord })
-    // .then(() => dispatch(addFoundWord(newWord)))
+    .then(dispatch(addFoundWord(newWord)))
     .catch((err) => console.log(err));
 };
 
