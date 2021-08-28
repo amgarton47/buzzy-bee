@@ -22,7 +22,7 @@ const FoundWords = (props) => {
 
 const mapState = (state) => ({
   // foundWords: state.beeData.correctGuesses,
-  foundWords: state.gameData.foundWords,
+  foundWords: state.beeData.foundWords,
 });
 
 export default connect(mapState, null)(memo(FoundWords));

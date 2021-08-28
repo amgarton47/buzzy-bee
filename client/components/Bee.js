@@ -1,7 +1,15 @@
 import React, { useEffect, memo } from "react";
 import { connect } from "react-redux";
-import { fetchBeeDataThunk, makeGuess, shuffleLetters } from "../redux/beeData";
-import { fetchGameDataThunk, addFoundWordThunk } from "../redux/gameData";
+import {
+  fetchBeeDataThunk,
+  shuffleLetters,
+  fetchGameDataThunk,
+  addFoundWordThunk,
+  incrementScore,
+} from "../redux/beeData";
+
+import { calculateWordScore } from "../utils";
+
 import { setEntryField, chopEntryField } from "../redux/entryField";
 
 import FoundWords from "./FoundWords";
@@ -15,7 +23,7 @@ const allowedCharacters = "abcdefghijklmnopqrstuvwxyz";
 
 const Bee = (props) => {
   useEffect(() => {
-    props.getBeeData(props.match.params.date);
+    // props.getBeeData(props.match.params.date);
     props.getGameData(props.match.params.date);
     document.getElementById("bee").focus();
   }, []);
@@ -62,8 +70,28 @@ const Bee = (props) => {
           .classList.add("hive-button-active");
         if (!props.entryValue == "") {
           if (props.answers.includes(props.entryValue.toLowerCase())) {
-            // props.makeGuess(props.entryValue);
-            props.addFoundWord(props.entryValue, props.match.params.date);
+            if (!props.foundWords.includes(props.entryValue.toLowerCase())) {
+              props.addFoundWord(props.entryValue, props.match.params.date);
+            } else {
+              document
+                .getElementById("inputForm")
+                .classList.toggle("animation-target");
+              setTimeout(() => {
+                props.setEntryField("");
+                document
+                  .getElementById("inputForm")
+                  .classList.toggle("animation-target");
+              }, 800);
+
+              const msgBox = document.getElementsByClassName(
+                "message-box-content"
+              )[0];
+              msgBox.innerHTML = "Already found";
+
+              msgBox.style.opacity = "100%";
+
+              setTimeout(() => (msgBox.style.opacity = "0%"), 750);
+            }
             props.setEntryField("");
           } else {
             document
@@ -212,6 +240,7 @@ const Bee = (props) => {
                 // alignItems: "center",
               }}
             >
+              {/* {console.log(props.)} */}
               {props.playerRank.title}
             </h4>
 
@@ -260,6 +289,7 @@ const mapState = (state) => ({
   playerScore: state.beeData.playerScore,
   playerRank: state.beeData.playerRank,
   entryValue: state.entryField.entryField,
+  foundWords: state.beeData.foundWords,
 });
 
 const mapDispatch = (dispatch) => ({
@@ -267,9 +297,10 @@ const mapDispatch = (dispatch) => ({
   getGameData: (date) => dispatch(fetchGameDataThunk(date)),
   setEntryField: (text) => dispatch(setEntryField(text)),
   chopEntryField: () => dispatch(chopEntryField()),
-  makeGuess: (guess) => dispatch(makeGuess(guess)),
+  // makeGuess: (guess) => dispatch(makeGuess(guess)),
   shuffleLetters: () => dispatch(shuffleLetters()),
   addFoundWord: (word, date) => dispatch(addFoundWordThunk(word, date)),
+  incrementScore: (score) => dispatch(incrementScore(score)),
 });
 
 export default connect(mapState, mapDispatch)(memo(Bee));

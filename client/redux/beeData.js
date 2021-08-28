@@ -1,14 +1,61 @@
 import axios from "axios";
 
-import { calculateTotalScore, calculateWordScore, shuffle } from "../utils";
+import {
+  calculateTotalScore,
+  calculateWordScore,
+  shuffle,
+  getRank,
+} from "../utils";
 
+// ACTION TYPES
 const SET_BEE_DATA = "SET_BEE_DATA";
 const SHUFFLE_LETTERS = "SHUFFLE_LETTERS";
 const MAKE_GUESS = "MAKE_GUESS";
 const INCREMENT_SCORE = "INCREMENT_SCORE";
+const SET_GAME_DATA = "SET_GAME_DATA";
+const ADD_FOUND_WORD = "ADD_FOUND_WORD";
+const ADD_ENTRY_ATTEMPT = "ADD_ENTRY_ATTEMPT";
+
+// ACTION CREATORS
+const setGameData = (data) => ({
+  type: SET_GAME_DATA,
+  data,
+});
+
+const addEntryAttempt = () => ({
+  type: ADD_ENTRY_ATTEMPT,
+  data,
+});
+
+export const incrementScore = (score) => ({
+  type: INCREMENT_SCORE,
+  score,
+});
+
+export const addFoundWord = (word) => ({
+  type: ADD_FOUND_WORD,
+  word,
+});
+
+export const makeGuess = (guess) => ({ type: MAKE_GUESS, guess });
 
 const setBeeData = (data) => ({ type: SET_BEE_DATA, data });
 export const shuffleLetters = () => ({ type: SHUFFLE_LETTERS });
+
+// THUNK CREATORS
+export const fetchGameDataThunk = (date) => async (dispatch) => {
+  axios
+    .get(`/api/gameData/${date}`)
+    .then(({ data }) => dispatch(setGameData(data)))
+    .catch((err) => console.log(err));
+};
+
+export const addFoundWordThunk = (newWord, date) => async (dispatch) => {
+  axios
+    .put(`/api/gameData/${date}`, { newWord })
+    .then(dispatch(addFoundWord(newWord)))
+    .catch((err) => console.log(err));
+};
 
 export const fetchBeeDataThunk = (date) => async (dispatch) => {
   axios
@@ -23,104 +70,92 @@ export const fetchBeeDataThunk = (date) => async (dispatch) => {
     .catch((err) => console.log(err));
 };
 
-export const makeGuess = (guess) => ({ type: MAKE_GUESS, guess });
+// const initialState = {
+//   centerLetter: "",
+//   outerLetters: [],
+//   answers: [],
+//   validLetters: [],
+//   displayDate: "",
+//   pangrams: [],
+//   guesses: [],
+//   correctGuesses: [],
+//   playerScore: 0,
+//   playerRank: { title: "Beginner", level: 0 },
+// };
+
+// const initialState = {
+//   date: "",
+//   foundWords: [],
+//   duration: 0,
+//   pangramsFound: [],
+//   entriesAttempted: 0,
+// };
 
 const initialState = {
-  centerLetter: "",
-  outerLetters: [],
-  answers: [],
-  validLetters: [],
-  displayDate: "",
-  pangrams: [],
-  guesses: [],
-  correctGuesses: [],
+  // BEE DATA
+  centerLetter: "s",
+  outerLetters: ["p", "a", "n", "g", "r", "m"],
+  answers: ["pangrams", "pangs", "sang", "pans", "span"],
+  validLetters: ["p", "a", "n", "g", "r", "m", "s"],
+  displayDate: "August 26, 2021",
+  pangrams: ["pangrams"],
   playerScore: 0,
   playerRank: { title: "Beginner", level: 0 },
+  // GAME DATA
+  date: "",
+  foundWords: [],
+  duration: 0,
+  pangramsFound: [],
+  entriesAttempted: 0,
 };
-
-const getRank = (score, answers, pangrams) => {
-  const maxScore = calculateTotalScore(answers, pangrams);
-  const pct = Math.round((score / maxScore) * 100);
-  if (pct < 2) {
-    return { title: "Beginner", level: 0 };
-  } else if (pct < 5) {
-    return { title: "Good Start", level: 1 };
-  } else if (pct < 8) {
-    return { title: "Moving Up", level: 2 };
-  } else if (pct < 15) {
-    return { title: "Good", level: 3 };
-  } else if (pct < 25) {
-    return { title: "Solid", level: 4 };
-  } else if (pct < 40) {
-    return { title: "Nice", level: 5 };
-  } else if (pct < 50) {
-    return { title: "Great", level: 6 };
-  } else if (pct < 60) {
-    return { title: "Amazing", level: 7 };
-  } else if (pct < 100) {
-    return { title: "Genius", level: 8 };
-  } else if (pct == 100) {
-    return { title: "Queen Bee!", level: 8 };
-  }
-};
-
-export const incrementScore = (score) => ({
-  type: INCREMENT_SCORE,
-  score,
-});
 
 const beeDataReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_BEE_DATA:
-      const {
-        centerLetter,
-        outerLetters,
-        answers,
-        validLetters,
-        displayDate,
-        pangrams,
-      } = action.data;
+    case SET_BEE_DATA: // set bee data on state (retrieved from api)
+      const { centerLetter, outerLetters, validLetters } = action.data;
       return {
         ...state,
+        ...action.data,
         centerLetter: centerLetter.trim(),
         outerLetters: shuffle(outerLetters.map((l) => l.trim())),
         validLetters: validLetters.map((l) => l.trim()),
-        pangrams,
-        answers,
-        displayDate,
       };
-    case MAKE_GUESS:
-      const caseSensitiveEntry = action.guess.toLowerCase();
-
-      if (state.guesses.includes(caseSensitiveEntry)) {
-        return state;
-      } else {
-        if (state.answers.includes(caseSensitiveEntry)) {
-          return {
-            ...state,
-            correctGuesses: [...state.correctGuesses, caseSensitiveEntry],
-            guesses: [...state.guesses, caseSensitiveEntry],
-            playerScore:
-              state.playerScore +
-              calculateWordScore(caseSensitiveEntry, state.pangrams),
-            playerRank: getRank(
-              state.playerScore +
-                calculateWordScore(caseSensitiveEntry, state.pangrams),
-              state.answers,
-              state.pangrams
-            ),
-          };
-        } else {
-          return {
-            ...state,
-            guesses: [...state.guesses, caseSensitiveEntry],
-          };
-        }
-      }
     case SHUFFLE_LETTERS:
       return { ...state, outerLetters: shuffle([...state.outerLetters]) };
-    case INCREMENT_SCORE:
-      return { ...state, playerScore: state.playerScore + action.score };
+    case SET_GAME_DATA:
+      const { foundWords } = action.data;
+
+      console.log(
+        getRank(
+          calculateTotalScore(foundWords, state.pangrams),
+          state.answers,
+          state.pangrams
+        )
+      );
+      return {
+        ...state,
+        ...action.data,
+        playerScore: calculateTotalScore(foundWords, state.pangrams),
+        playerRank: getRank(
+          calculateTotalScore(foundWords, state.pangrams),
+          state.answers,
+          state.pangrams
+        ),
+      };
+    case ADD_FOUND_WORD:
+      return {
+        ...state,
+        foundWords: [...state.foundWords, action.word],
+        playerScore:
+          state.playerScore + calculateWordScore(action.word, state.pangrams),
+        playerRank: getRank(
+          state.playerScore + calculateWordScore(action.word, state.pangrams),
+          state.answers,
+          state.pangrams
+        ),
+      };
+    case ADD_ENTRY_ATTEMPT:
+      return { ...state, entriesAttempted: state.entriesAttempted + 1 };
     default:
       return state;
   }
