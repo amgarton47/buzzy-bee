@@ -15,11 +15,21 @@ const INCREMENT_SCORE = "INCREMENT_SCORE";
 const SET_GAME_DATA = "SET_GAME_DATA";
 const ADD_FOUND_WORD = "ADD_FOUND_WORD";
 const ADD_ENTRY_ATTEMPT = "ADD_ENTRY_ATTEMPT";
+const IS_LOADING = "IS_LOADING";
+const IS_NOT_LOADING = "IS_NOT_LOADING";
 
 // ACTION CREATORS
 const setGameData = (data) => ({
   type: SET_GAME_DATA,
   data,
+});
+
+const isLoading = () => ({
+  type: IS_LOADING,
+});
+
+const isNotLoading = () => ({
+  type: IS_NOT_LOADING,
 });
 
 const addEntryAttempt = () => ({
@@ -58,6 +68,7 @@ export const addFoundWordThunk = (newWord, date) => async (dispatch) => {
 };
 
 export const fetchBeeDataThunk = (date) => async (dispatch) => {
+  dispatch(isLoading());
   axios
     .get(`/api/beeData/${date}`)
     .then(({ data }) => {
@@ -67,47 +78,47 @@ export const fetchBeeDataThunk = (date) => async (dispatch) => {
         window.location.assign("/today");
       }
     })
+    .then(() => dispatch(fetchGameDataThunk(date)))
+    .then(() => dispatch(isNotLoading()))
     .catch((err) => console.log(err));
 };
 
-// const initialState = {
-//   centerLetter: "",
-//   outerLetters: [],
-//   answers: [],
-//   validLetters: [],
-//   displayDate: "",
-//   pangrams: [],
-//   guesses: [],
-//   correctGuesses: [],
-//   playerScore: 0,
-//   playerRank: { title: "Beginner", level: 0 },
-// };
+const initialState = {
+  centerLetter: "",
+  outerLetters: [],
+  answers: [],
+  validLetters: [],
+  displayDate: "",
+  pangrams: [],
+  guesses: [],
+  correctGuesses: [],
+  playerScore: 0,
+  playerRank: { title: "Beginner", level: 0 },
+  date: "",
+  foundWords: [],
+  duration: 0,
+  pangramsFound: [],
+  entriesAttempted: 0,
+  loading: true,
+};
 
 // const initialState = {
+//   // BEE DATA
+//   centerLetter: "s",
+//   outerLetters: ["p", "a", "n", "g", "r", "m"],
+//   answers: ["pangrams", "pangs", "sang", "pans", "span"],
+//   validLetters: ["p", "a", "n", "g", "r", "m", "s"],
+//   displayDate: "August 26, 2021",
+//   pangrams: ["pangrams"],
+//   playerScore: 0,
+//   playerRank: { title: "Beginner", level: 0 },
+//   // GAME DATA
 //   date: "",
 //   foundWords: [],
 //   duration: 0,
 //   pangramsFound: [],
 //   entriesAttempted: 0,
 // };
-
-const initialState = {
-  // BEE DATA
-  centerLetter: "s",
-  outerLetters: ["p", "a", "n", "g", "r", "m"],
-  answers: ["pangrams", "pangs", "sang", "pans", "span"],
-  validLetters: ["p", "a", "n", "g", "r", "m", "s"],
-  displayDate: "August 26, 2021",
-  pangrams: ["pangrams"],
-  playerScore: 0,
-  playerRank: { title: "Beginner", level: 0 },
-  // GAME DATA
-  date: "",
-  foundWords: [],
-  duration: 0,
-  pangramsFound: [],
-  entriesAttempted: 0,
-};
 
 const beeDataReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -124,14 +135,6 @@ const beeDataReducer = (state = initialState, action) => {
       return { ...state, outerLetters: shuffle([...state.outerLetters]) };
     case SET_GAME_DATA:
       const { foundWords } = action.data;
-
-      console.log(
-        getRank(
-          calculateTotalScore(foundWords, state.pangrams),
-          state.answers,
-          state.pangrams
-        )
-      );
       return {
         ...state,
         ...action.data,
@@ -156,6 +159,10 @@ const beeDataReducer = (state = initialState, action) => {
       };
     case ADD_ENTRY_ATTEMPT:
       return { ...state, entriesAttempted: state.entriesAttempted + 1 };
+    case IS_LOADING:
+      return { ...state, loading: true };
+    case IS_NOT_LOADING:
+      return { ...state, loading: false };
     default:
       return state;
   }

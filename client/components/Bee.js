@@ -23,9 +23,9 @@ const allowedCharacters = "abcdefghijklmnopqrstuvwxyz";
 
 const Bee = (props) => {
   useEffect(() => {
-    // props.getBeeData(props.match.params.date);
-    props.getGameData(props.match.params.date);
-    document.getElementById("bee").focus();
+    props.getBeeData(props.match.params.date);
+    // props.getGameData(props.match.params.date);
+    // document.getElementById("bee").focus();
   }, []);
 
   window.isShuffling = false;
@@ -72,6 +72,16 @@ const Bee = (props) => {
           if (props.answers.includes(props.entryValue.toLowerCase())) {
             if (!props.foundWords.includes(props.entryValue.toLowerCase())) {
               props.addFoundWord(props.entryValue, props.match.params.date);
+              const yayBox =
+                document.getElementsByClassName("yay-box-content")[0];
+
+              yayBox.innerHTML = `+${calculateWordScore(
+                props.entryValue,
+                props.pangrams
+              )}`;
+              yayBox.style.opacity = "100%";
+
+              setTimeout(() => (yayBox.style.opacity = "0%"), 750);
             } else {
               document
                 .getElementById("inputForm")
@@ -216,65 +226,66 @@ const Bee = (props) => {
       </div>
       <br></br>
 
-      <div className="controls-box">
-        <div className="control-panel">
-          <div className="message-box">
-            <span className="message-box-content"></span>
+      {props.isLoading ? (
+        <div className="loading"></div>
+      ) : (
+        <div className="controls-box">
+          <div className="control-panel">
+            <div className="message-box">
+              <span className="message-box-content"></span>
+            </div>
+            <div className="yay-box">
+              <span className="yay-box-content"></span>
+            </div>
+            <EntryField />
+            <Comb />
+            <ControlButtons />
           </div>
-          <EntryField />
-          <Comb />
-          <ControlButtons />
-        </div>
 
-        <div id="status-box">
-          <div id="progress-box">
-            {/* <div>Score: {props.playerScore}</div> */}
-            <h4
-              style={{
-                padding: "10px",
-                left: "-100px",
-                // height: "1.875em",
-                // minWidth: "5em",
-                // fontWeight: "700",
-                // display: "flex",
-                // alignItems: "center",
-              }}
-            >
-              {/* {console.log(props.)} */}
-              {props.playerRank.title}
-            </h4>
+          <div id="status-box">
+            <div id="progress-box">
+              <h4
+                style={{
+                  padding: "10px",
+                  left: "-100px",
+                  height: "1.875em",
+                }}
+              >
+                {props.playerRank.title}
+              </h4>
 
-            <div id="progress-bar">
-              <div id="progress-line">
-                <div id="progress-dots">
-                  {Array(9)
-                    .fill("")
-                    .map((_, idx) => (
-                      <div
-                        key={idx}
-                        className={`progress-dot ${
-                          props.playerRank.level > idx - 1
-                            ? "completed-dot"
-                            : ""
-                        }`}
-                      ></div>
-                    ))}
+              <div id="progress-bar">
+                <div id="progress-line">
+                  <div id="progress-dots">
+                    {Array(9)
+                      .fill("")
+                      .map((_, idx) => (
+                        <div
+                          key={idx}
+                          className={`progress-dot ${
+                            props.playerRank.level > idx - 1
+                              ? "completed-dot"
+                              : ""
+                          }`}
+                        ></div>
+                      ))}
+                  </div>
+                </div>
+                <div
+                  id="progress-line-marker"
+                  style={{ left: `${12.5 * props.playerRank.level + 1}%` }}
+                >
+                  <span id="progress-line-value" style={{ fontWeight: "100" }}>
+                    {props.playerScore}
+                  </span>
                 </div>
               </div>
-              <div
-                id="progress-line-marker"
-                style={{ left: `${12.5 * props.playerRank.level + 1}%` }}
-              >
-                <span id="progress-line-value" style={{ fontWeight: "100" }}>
-                  {props.playerScore}
-                </span>
-              </div>
             </div>
+            <br></br>
+            <FoundWords />
           </div>
-          <br></br>
-          <FoundWords />
         </div>
-      </div>
+      )}
     </div>
   );
 };
@@ -283,13 +294,14 @@ const mapState = (state) => ({
   centerLetter: state.beeData.centerLetter,
   outerLetters: state.beeData.outerLetters,
   validLetters: state.beeData.validLetters,
-  // pangrams: state.beeData.pangrams,
+  pangrams: state.beeData.pangrams,
   displayDate: state.beeData.displayDate,
   answers: state.beeData.answers,
   playerScore: state.beeData.playerScore,
   playerRank: state.beeData.playerRank,
   entryValue: state.entryField.entryField,
   foundWords: state.beeData.foundWords,
+  isLoading: state.beeData.loading,
 });
 
 const mapDispatch = (dispatch) => ({

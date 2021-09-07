@@ -7,7 +7,7 @@ const dbName =
 console.log(chalk.yellow(`Opening database connection to ${dbName}`));
 
 const db = new Sequelize(dbName, {
-  // logging: false,
+  logging: false,
 });
 
 module.exports = db;

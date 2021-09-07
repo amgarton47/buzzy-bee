@@ -3,8 +3,6 @@ import { calculateTotalScore } from "./calculateScore";
 export const getRank = (score, answers, pangrams) => {
   const maxScore = calculateTotalScore(answers, pangrams);
   const pct = Math.round((score / maxScore) * 100);
-
-  console.log(pct);
   if (pct < 2) {
     return { title: "Beginner", level: 0 };
   } else if (pct < 5) {

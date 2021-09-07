@@ -2,25 +2,15 @@ const express = require("express");
 const app = express();
 const PORT = 8080;
 const path = require("path");
+const morgan = require("morgan");
 
 const chalk = require("chalk");
 const { db } = require("./db");
-// const cors = require("cors");
-// const bodyParser = require("body-parser");
-
-// var allowCrossDomain = function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-//   res.header("Access-Control-Allow-Headers", "Content-Type");
-//   next();
-// };
-
-// app.use(allowCrossDomain);
-// app.use(cors());
-// app.use(bodyParser());
-
 const bodyParser = require("body-parser");
+
 app.use(bodyParser());
+
+app.use(morgan("dev"));
 
 app.use(express.static(path.join(__dirname, "..", "public")));
 
