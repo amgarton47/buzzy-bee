@@ -187,7 +187,7 @@ const Bee = (props) => {
     >
       <br></br>
       <div>
-        Spelling Bee <span>{props.displayDate}</span>
+        Spelling Bee - <span>{props.displayDate}</span>
       </div>
       <br></br>
 
