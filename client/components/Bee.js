@@ -206,13 +206,7 @@ const Bee = (props) => {
             {/* <div>Score: {props.playerScore}</div> */}
             <h4
               style={{
-                padding: "10px",
-                left: "-100px",
-                // height: "1.875em",
-                // minWidth: "5em",
-                // fontWeight: "700",
-                // display: "flex",
-                // alignItems: "center",
+                paddingRight: "10px",
               }}
             >
               {props.playerRank.title}
@@ -257,7 +251,6 @@ const mapState = (state) => ({
   centerLetter: state.beeData.centerLetter,
   outerLetters: state.beeData.outerLetters,
   validLetters: state.beeData.validLetters,
-  // pangrams: state.beeData.pangrams,
   displayDate: state.beeData.displayDate,
   answers: state.beeData.answers,
   playerScore: state.beeData.playerScore,

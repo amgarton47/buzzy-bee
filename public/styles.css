@@ -199,6 +199,10 @@ a:active polygon {
   min-width: 3em;
 }
 
+nav > a {
+  padding: 5px;
+}
+
 .hive-button:active {
   background-color: #ededed;
 }
