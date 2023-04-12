@@ -34,6 +34,7 @@ const init = async () => {
   try {
     app.listen(PORT, async () => console.log(`Listening on port ${PORT}`));
     await db.sync(/*{ force: true }*/);
+    console.log("synced?");
   } catch (err) {
     console.log(err);
   }

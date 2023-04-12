@@ -3,13 +3,21 @@ import { connect } from "react-redux";
 
 import { chopEntryField, setEntryField } from "../redux/entryField";
 import { makeGuess, shuffleLetters } from "../redux/beeData";
+import { addFoundWord } from "../redux/gameData";
 
 const ControlButtons = (props) => {
   const handleEnterPress = () => {
     document.getElementById("enter-button").classList.add("hive-button-active");
+    setTimeout(() =>
+      document
+        .getElementById("enter-button")
+        .classList.remove("hive-button-active")
+    );
+    const lower = props.entryValue.toLowerCase();
     if (!props.entryValue == "") {
-      if (props.answers.includes(props.entryValue.toLowerCase())) {
+      if (props.answers.includes(lower) && !props.guesses.includes(lower)) {
         props.makeGuess(props.entryValue);
+        props.addFoundWord(props.entryValue, null);
         props.setEntryField("");
       } else {
         document
@@ -26,11 +34,11 @@ const ControlButtons = (props) => {
           "message-box-content"
         )[0];
 
-        if (props.entryValue.length < 4) {
+        if (props.guesses.includes(lower)) {
+          msgBox.innerHTML = "Already Found";
+        } else if (props.entryValue.length < 4) {
           msgBox.innerHTML = "Too short";
-        } else if (
-          !props.entryValue.toLowerCase().includes(props.centerLetter)
-        ) {
+        } else if (!lower.includes(props.centerLetter)) {
           msgBox.innerHTML = "Missing center letter";
         } else if (
           !props.entryValue
@@ -42,7 +50,7 @@ const ControlButtons = (props) => {
             )
         ) {
           msgBox.innerHTML = "Bad letters";
-        } else if (!props.answers.includes(props.entryValue.toLowerCase())) {
+        } else if (!props.answers.includes(lower)) {
           msgBox.innerHTML = "Not in word list";
         }
 
@@ -99,16 +107,22 @@ const ControlButtons = (props) => {
   );
 };
 
-const mapState = (state) => ({
-  entryValue: state.entryField.entryField,
-  answers: state.beeData.answers,
-});
+const mapState = (state) => {
+  return {
+    entryValue: state.entryField.entryField,
+    answers: state.beeData.answers,
+    guesses: state.beeData.guesses,
+    centerLetter: state.beeData.centerLetter,
+    validLetters: state.beeData.validLetters,
+  };
+};
 
 const mapDispatch = (dispatch) => ({
   chopEntryField: () => dispatch(chopEntryField()),
   setEntryField: (text) => dispatch(setEntryField(text)),
   makeGuess: (guess) => dispatch(makeGuess(guess)),
   shuffleLetters: () => dispatch(shuffleLetters()),
+  addFoundWord: (word) => dispatch(addFoundWord(word)),
 });
 
 export default connect(mapState, mapDispatch)(React.memo(ControlButtons));

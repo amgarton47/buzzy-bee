@@ -61,9 +61,10 @@ const Bee = (props) => {
           .getElementById("enter-button")
           .classList.add("hive-button-active");
         if (!props.entryValue == "") {
-          if (props.answers.includes(props.entryValue.toLowerCase())) {
-            // props.makeGuess(props.entryValue);
-            props.addFoundWord(props.entryValue, props.match.params.date);
+          const lower = props.entryValue.toLowerCase();
+          if (props.answers.includes(lower) && !props.guesses.includes(lower)) {
+            props.makeGuess(props.entryValue);
+            props.addFoundWord(props.entryValue, null);
             props.setEntryField("");
           } else {
             document
@@ -80,7 +81,9 @@ const Bee = (props) => {
               "message-box-content"
             )[0];
 
-            if (props.entryValue.length < 4) {
+            if (props.guesses.includes(lower)) {
+              msgBox.innerHTML = "Already Found";
+            } else if (props.entryValue.length < 4) {
               msgBox.innerHTML = "Too short";
             } else if (
               !props.entryValue.toLowerCase().includes(props.centerLetter)
@@ -260,6 +263,7 @@ const mapState = (state) => ({
   playerScore: state.beeData.playerScore,
   playerRank: state.beeData.playerRank,
   entryValue: state.entryField.entryField,
+  guesses: state.beeData.guesses,
 });
 
 const mapDispatch = (dispatch) => ({
